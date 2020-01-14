@@ -1,4 +1,4 @@
-***Assetfinder & httprobe x @tomnonomnom***
+***Enumerate subdomains and check for webservers with assetfinder & httprobe x @tomnonomnom***
 
 *tee enables us to see the output in the terminal as it's written to a file, then we run a for loop on our .txt files and remove duplicate lines with sort -u*:
 
