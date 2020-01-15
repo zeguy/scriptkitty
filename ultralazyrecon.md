@@ -5,6 +5,11 @@
 ```bash
 assetfinder --subs-only example.com | tee subs.txt; cat subs.txt | httprobe | tee http.txt; for f in *.txt; do sort -u "$f" -o "$f"; done
 ```
+*further comb results with @tomnomnom's meg to search for robots.txt, for example, saving only 200 responses and looking for potentially interesting paths*
+
+```bash
+assetfinder --subs-only example.com | tee subs; cat subs | httprobe | tee hosts; for f in *; do sort -u "$f" -o "$f"; meg -s 200 /robots.txt; grep -ri 'disallow' out/ | tee nobots; done
+```
 
 
 ***Leveraging Shodan API to find hosts running specific service version***
