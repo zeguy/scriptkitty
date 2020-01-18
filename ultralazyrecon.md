@@ -10,7 +10,15 @@ assetfinder --subs-only example.com | tee subs.txt; cat subs.txt | httprobe | te
 ```bash
 assetfinder --subs-only example.com | tee subs; cat subs | httprobe | tee hosts; for f in *; do sort -u "$f" -o "$f"; meg -s 200 /robots.txt; grep -ri 'disallow' out/ | tee nobots; done
 ```
+---
 
+***Search CNAME records across multiple domains listed in file and output relevant results only***
+
+```bash
+xargs -n1 -a FILENAME dig CNAME | grep CNAME
+```
+
+---
 
 ***Leveraging Shodan API to find hosts running specific service version***
 
