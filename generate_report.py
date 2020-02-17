@@ -29,7 +29,7 @@ employee_list = read_employees('/home/username/data/employees.csv')
 print(employee_list)
 dictionary = process_data(employee_list)
 print(dictionary)
-write_report(dictionary, '/home/username/test_report.txt')
+write_report(dictionary, '/home/username/data/test_report.txt')
 
 
 
