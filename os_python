@@ -120,6 +120,68 @@ if __name__ == "__main__":
   returned_errors = error_search(log_file)
   file_output(returned_errors)
   sys.exit(0)
+    
+
+###
+
+#!/usr/bin/env python3
+import re
+import operator
+import csv
+
+usernames = []
+error_messages = []
+username_data = []
+error_data = []
+
+with open('syslog.log') as log:
+    f = log.readlines()
+    for line in f:
+        username = re.search(r'\((.*?)\)', line)
+        error = re.search(r"(?<=ERROR )[\w ]*", line)
+        if username:
+            if username.group(1) not in usernames:
+                usernames.append(username.group(1))
+        if error:
+            if error.group(0) not in error_messages:
+                error_messages.append(error.group(0))
+                
+    for username in usernames:
+        error_count = 0
+        info_count = 0
+        for line in f:
+            error = re.search(r"ticky: ERROR [\w ]* ", line)
+            info = re.search(r"ticky: INFO [\w ]* ", line)
+            if error and re.search(username, line):
+                error_count += 1
+            elif info and re.search(username, line):
+                info_count += 1 
+        username_data.append({"Username":username, "INFO":info_count, "ERROR":error_count })
+
+    for error_message in error_messages:
+        error_count = 0
+        for line in f:
+            error = re.search(r"(?<=ERROR )[\w ]*", line)
+            if error and re.search(error_message, line):
+                error_count += 1
+        error_data.append({"Error":error_message, "Count":error_count })
+
+username_data = sorted(username_data, key = lambda i: i["Username"])
+error_data = sorted(error_data, key = lambda i: i["Count"], reverse=True)
+error_message = "error_message.csv"
+user_statistics = "user_statistics.csv"
+errors_csv_columns = ['Error','Count']
+per_user_csv_colums = ['Username', 'INFO', 'ERROR']
+
+try:
+    with open(error_message, 'w') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=errors_csv_columns)
+        writer.writeheader()
+        for data in error_data:
+            writer.writerow(data)
+    csvfile.close()
+except IOError:
+    print("I/O error") 
 
 
 
