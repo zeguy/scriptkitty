@@ -21,3 +21,31 @@ for file in os.listdir(sys.argv[1]):
         image.save(destination+"/"+str(file)+".jpg")
     except:
         pass
+        
+### Process Text Files with Python Dictionaries and Upload to Running Web Service
+
+#! /usr/bin/env python3
+
+import os
+import requests
+
+
+url = 'http://35.232.92.41/feedback/'
+folder = '/data/feedback'
+
+
+#iterate through files in desired folder
+for file in os.listdir(folder):
+    dictionary = {}
+    # open file and read lines
+    f = open(os.path.join(folder, file), 'r')
+    lines = f.readlines()
+    dictionary["feedback"] = lines[3]
+    dictionary["date"] = lines[2]
+    dictionary["name"] = lines[1]
+    dictionary["title"] = lines[0]
+    # send dictionary with user review as post request
+    x = requests.post(url, data = dictionary)
+    print(x.status_code)
+    print(x.text)
+
